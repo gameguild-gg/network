@@ -2,8 +2,6 @@
 
 -----------------
 
-// todo: add badge status
-
 # Network Course
 
 This repo belongs to [Game Guild Networking Course](https://gameguild.gg/p/networking/). If you use this repo, consider yourself under the [Academic Honesty](https://gameguild.gg/academic-honesty). Read both throughly. If you have any questions, bug fix, or improvement proposal, raise an issue. Especially if you have found someone misusing the repo, we will file a DMCA takedown. Read the [LICENSE](./LICENSE.md) if you are in doubt.
