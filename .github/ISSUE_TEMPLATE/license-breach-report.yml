@@ -25,19 +25,19 @@ body:
     validations:
       required: true
   - type: input
-    id: reporter
-    attributes:
-      label: Your Contact (optional)
-      description: If you wish to be contacted for follow-up, provide your email or GitHub username.
-      placeholder: e.g. your@email.com
-    validations:
-      required: false
-  - type: input
     id: private-issue
     attributes:
       label: Have you created an issue on the other repository requesting it be made private?
       description: If yes, please provide a link to the issue you created on the offending repository.
       placeholder: e.g. https://github.com/username/repo/issues/123
+    validations:
+      required: false
+  - type: input
+    id: reported-to-github
+    attributes:
+      label: Have you reported the repository to GitHub?
+      description: Before filling out a DMCA takedown, have you reported the repository to GitHub via the "Report abuse" link or contact form?
+      placeholder: Yes/No. If yes, please provide any reference or details.
     validations:
       required: false
   - type: input
