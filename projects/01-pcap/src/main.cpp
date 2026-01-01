@@ -30,96 +30,71 @@ int main() {
 
     std::cout << "Successfully opened: " << pcapFile << std::endl << std::flush;
 
-    // Read and analyze packets
-    pcpp::RawPacket rawPacket;
-
-    // Task 1: Basic Packet Statistics
-    int packetCount = 0;
-    int ipv4Count = 0;
-    int ipv6Count = 0;
-    int tcpCount = 0;
-    int udpCount = 0;
-    int arpCount = 0;
-    int icmpCount = 0;
-
-    // Task 2: Layer Analysis
-    int ethernetCount = 0;
-    int multiLayerCount = 0;  // Ethernet + IP + TCP/UDP
-
-    while (reader->getNextPacket(rawPacket)) {
-        packetCount++;
-
-        // Parse the raw packet
-        pcpp::Packet parsedPacket(&rawPacket);
-
-        // Task 1: Check protocol types
-        if (parsedPacket.isPacketOfType(pcpp::IPv4)) {
-            ipv4Count++;
-        }
-
-        if (parsedPacket.isPacketOfType(pcpp::IPv6)) {
-            ipv6Count++;
-        }
-
-        if (parsedPacket.isPacketOfType(pcpp::TCP)) {
-            tcpCount++;
-        }
-
-        if (parsedPacket.isPacketOfType(pcpp::UDP)) {
-            udpCount++;
-        }
-
-        if (parsedPacket.isPacketOfType(pcpp::ARP)) {
-            arpCount++;
-        }
-
-        if (parsedPacket.isPacketOfType(pcpp::ICMP)) {
-            icmpCount++;
-        }
-
-        // Task 2: Layer Analysis
-        bool hasEthernet = parsedPacket.isPacketOfType(pcpp::Ethernet);
-        bool hasIP = parsedPacket.isPacketOfType(pcpp::IPv4) || parsedPacket.isPacketOfType(pcpp::IPv6);
-        bool hasTransport = parsedPacket.isPacketOfType(pcpp::TCP) || parsedPacket.isPacketOfType(pcpp::UDP);
-
-        if (hasEthernet) {
-            ethernetCount++;
-        }
-
-        // Multi-layer: Ethernet + IP + TCP/UDP
-        if (hasEthernet && hasIP && hasTransport) {
-            multiLayerCount++;
-        }
-    }
-
-    // Print Task 1 Summary
-    std::cout << "\n=== Task 1: Basic Packet Statistics ===" << std::endl;
-    std::cout << "Total packets: " << packetCount << std::endl;
-    std::cout << "IPv4 packets:  " << ipv4Count << std::endl;
-    std::cout << "IPv6 packets:  " << ipv6Count << std::endl;
-    std::cout << "TCP packets:   " << tcpCount << std::endl;
-    std::cout << "UDP packets:   " << udpCount << std::endl;
-    std::cout << "ARP packets:   " << arpCount << std::endl;
-    std::cout << "ICMP packets:  " << icmpCount << std::endl;
-
-    // Print Task 2 Summary
-    std::cout << "\n=== Task 2: Layer Analysis ===" << std::endl;
-    std::cout << "Ethernet frames:        " << ethernetCount << std::endl;
-    std::cout << "\nLayer 3 (Network) distribution:" << std::endl;
-    std::cout << "  IPv4:  " << ipv4Count << std::endl;
-    std::cout << "  IPv6:  " << ipv6Count << std::endl;
-    std::cout << "  ARP:   " << arpCount << std::endl;
-    std::cout << "\nLayer 4 (Transport) distribution:" << std::endl;
-    std::cout << "  TCP:   " << tcpCount << std::endl;
-    std::cout << "  UDP:   " << udpCount << std::endl;
-    std::cout << "  ICMP:  " << icmpCount << std::endl;
-    std::cout << "\nMulti-layer packets (Eth+IP+TCP/UDP): " << multiLayerCount << std::endl;
+    // ========================================
+    // EDUCATIONAL INSIGHTS FOR PCAP ANALYSIS
+    // ========================================
+    //
+    // You now have a reader that can iterate through the PCAP file.
+    // This is where YOUR implementation goes in the test functions!
+    //
+    // Key Concepts to Understand:
+    // 
+    // 1. PACKET ITERATION:
+    //    - Use getNextPacket(rawPacket) to read packets sequentially
+    //    - Each call returns one packet and advances the pointer
+    //    - When no more packets exist, the function returns false
+    //
+    // 2. PACKET PARSING:
+    //    - pcpp::Packet wraps pcpp::RawPacket for easy layer access
+    //    - isPacketOfType() checks for protocol presence (non-destructive)
+    //    - getLayerOfType<T>() retrieves specific layer objects
+    //
+    // 3. PROTOCOL CHECKING PATTERNS:
+    //    Pattern A (boolean check):
+    //      if (packet.isPacketOfType(pcpp::IPv4)) { count++; }
+    //
+    //    Pattern B (layer retrieval):
+    //      auto* ipv4Layer = packet.getLayerOfType<pcpp::IPv4Layer>();
+    //      if (ipv4Layer != nullptr) { /* process layer */ }
+    //
+    // 4. OSI MODEL CONTEXT:
+    //    - Layer 2 (Data Link): Ethernet (hardware addressing)
+    //    - Layer 3 (Network):   IPv4, IPv6, ARP (logical routing)
+    //    - Layer 4 (Transport): TCP, UDP, ICMP (end-to-end delivery)
+    //    
+    //    Note: A single packet can contain multiple protocols!
+    //    Example: Ethernet -> IPv4 -> TCP -> Application Data
+    //
+    // 5. COUNTING STRATEGIES:
+    //    - Total packets: Count every packet read from file
+    //    - Protocol packets: Check which layers are present per packet
+    //    - Each check is independent (a TCP packet is ALSO an IPv4 packet)
+    //
+    // 6. PRACTICAL IMPLEMENTATION STEPS:
+    //    a) Create counter variables for each protocol type
+    //    b) Loop through packets with getNextPacket()
+    //    c) Parse each raw packet into a Packet object
+    //    d) Use isPacketOfType() to check for protocol presence
+    //    e) Increment corresponding counters
+    //    f) Store results in the struct and return
+    //
+    // DEBUGGING TIPS:
+    //    - Use std::cout to verify packet counts match expected values
+    //    - Print first few packets to understand structure
+    //    - Check if packet count is non-zero before checking specifics
+    //    - The doctest framework will show detailed mismatches
+    //
+    // REMEMBER: Implement both analyzeBasicStats() and 
+    // analyzeLayerStats() in tests.cpp with this logic!
 
     // Close the file
     reader->close();
     delete reader;
 
-    std::cout << "\nPcapPlusPlus is working correctly!" << std::endl;
+    std::cout << "\nPcapPlusPlus is initialized and ready for your analysis!" << std::endl;
+    std::cout << "Now implement the two functions in tests.cpp:" << std::endl;
+    std::cout << "  1. analyzeBasicStats() - Count protocol types" << std::endl;
+    std::cout << "  2. analyzeLayerStats() - Analyze OSI layer distribution" << std::endl;
 
     return 0;
 }
