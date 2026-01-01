@@ -28,7 +28,7 @@ If everything works correctly, the cmake will download and extract the pcap file
 
 All screenshots should be placed in this very own `01-pcap/` directory. At the same level as this README.md file. 
 
-## Coding (4 points)
+## Coding (6 points)
 
 Go to the `tests` directory and fill the requirements. CI/CD will generate a report on the root folder `reports`.
 
