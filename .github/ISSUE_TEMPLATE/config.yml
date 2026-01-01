@@ -1,11 +1,5 @@
 blank_issues_enabled: false
-issue_templates:
-  - name: Bug Report
-    description: Create a report to help us improve
-    file: bug_report.yml
-  - name: Feature Request
-    description: Suggest an idea for this project
-    file: feature_request.yml
-  - name: License Breach Report
-    description: Report a license violation (e.g., someone posting assignment solutions)
-    file: license-breach-report.yml
+contact_links:
+  - name: Security Issue
+    url: https://github.com/contact/security
+    about: Please report security vulnerabilities here.
