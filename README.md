@@ -10,6 +10,8 @@ This repo belongs to [Game Guild Networking Course](https://gameguild.gg/p/netwo
 
 **WARNING: IF YOU ARE A STUDENT OUTSIDE CHAMPLAIN, DO NOT MAKE YOUR SOLUTION PUBLICLY AVAILABLE, AND DO SUBMIT YOUR OWN WORK. OTHERWISE, YOU WILL BE BANNED FROM GAMEGUILD AND REPORTED ON GITHUB** Thank you for creating a fair learning environment.
 
+You are allowed to fork this repo in cases you want to contribute to it, or if you are an instructor wanting to use it for your own class.
+
 ## Cloning this Repository
 
 The following instructions are adapted from the GitHub documentation on [duplicating a repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/duplicating-a-repository). The procedure below walks you through creating a private network repository that you can use for development.
