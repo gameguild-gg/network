@@ -28,10 +28,10 @@ Alternativelly, you may want to follow this process on any **GOOD** GIT-GUI tool
    $ cd network-public
    
    # If you pull / push over HTTPS
-   $ git push https://github.com/student/network-private.git master
+   $ git push https://github.com/student/network-private.git main
 
    # If you pull / push over SSH
-   $ git push git@github.com:student/network-private.git master
+   $ git push git@github.com:student/network-private.git main
    ```
    This copies everything in the public network repository to your own private repository. You can now delete your local clone of the public repository:
    ```console
@@ -60,7 +60,7 @@ Alternativelly, you may want to follow this process on any **GOOD** GIT-GUI tool
    ```
 6. You can now pull in changes from the public network repository as needed with:
    ```console
-   $ git pull public master
+   $ git pull public main
    ```
 7. **Enable GitHub Actions** from the project settings of your private repository on github.com;
    ```
