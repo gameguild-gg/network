@@ -12,7 +12,7 @@ This repo belongs to [Game Guild Networking Course](https://gameguild.gg/p/netwo
 
 You are allowed to fork this repo in cases you want to contribute to it, or if you are an instructor wanting to use it for your own class.
 
-## Cloning this Repository
+## Duplicating this Repository
 
 The following instructions are adapted from the GitHub documentation on [duplicating a repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/duplicating-a-repository). The procedure below walks you through creating a private network repository that you can use for development.
 
