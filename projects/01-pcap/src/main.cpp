@@ -1,13 +1,5 @@
 #include <iostream>
-#include <PcapFileDevice.h>
-#include <Packet.h>
-#include <EthLayer.h>
-#include <IPv4Layer.h>
-#include <IPv6Layer.h>
-#include <TcpLayer.h>
-#include <UdpLayer.h>
-#include <ArpLayer.h>
-#include <IcmpLayer.h>
+#include <PcapReader.h>
 
 int main() {
     // Open the pcap file
@@ -91,7 +83,7 @@ int main() {
     reader->close();
     delete reader;
 
-    std::cout << "\nPcapPlusPlus is initialized and ready for your analysis!" << std::endl;
+    std::cout << "\nPCAP reader is initialized and ready for your analysis!" << std::endl;
     std::cout << "Now implement the two functions in tests.cpp:" << std::endl;
     std::cout << "  1. analyzeBasicStats() - Count protocol types" << std::endl;
     std::cout << "  2. analyzeLayerStats() - Analyze OSI layer distribution" << std::endl;

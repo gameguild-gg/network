@@ -57,8 +57,8 @@ endif()
 # Set C++ standard (inherited from parent, but explicit here)
 target_compile_features(01-pcap PRIVATE cxx_std_23)
 
-# Link to PcapPlusPlus and libpcap
-target_link_libraries(01-pcap PRIVATE Pcap++ Packet++ Common++ PCAP::PCAP)
+# Link to our header-only PCAP reader
+target_include_directories(01-pcap PRIVATE ${CMAKE_SOURCE_DIR}/lib)
 
 # Add compile options
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
@@ -89,7 +89,8 @@ endforeach()
 # Test executable
 add_executable(01-pcap-tests tests/tests.cpp)
 target_compile_features(01-pcap-tests PRIVATE cxx_std_23)
-target_link_libraries(01-pcap-tests PRIVATE Pcap++ Packet++ Common++ PCAP::PCAP doctest::doctest)
+target_include_directories(01-pcap-tests PRIVATE ${CMAKE_SOURCE_DIR}/lib)
+target_link_libraries(01-pcap-tests PRIVATE doctest::doctest)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     target_compile_options(01-pcap-tests PRIVATE -Wall -Wextra -Wpedantic)
