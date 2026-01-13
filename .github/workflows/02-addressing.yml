@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake g++
+        run: sudo apt-get update && sudo apt-get install -y cmake g++ libpcap-dev flex bison
       - name: Build project (parallel)
         run: |
           cmake -S . -B build
