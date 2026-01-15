@@ -3,15 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <PcapFileDevice.h>
-#include <Packet.h>
-#include <EthLayer.h>
-#include <IPv4Layer.h>
-#include <IPv6Layer.h>
-#include <TcpLayer.h>
-#include <UdpLayer.h>
-#include <ArpLayer.h>
-#include <IcmpLayer.h>
+#include <PcapReader.h>
 
 // Structure to hold packet statistics for Task 1
 struct BasicStats {
