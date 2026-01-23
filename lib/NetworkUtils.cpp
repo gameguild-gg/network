@@ -43,7 +43,7 @@ std::optional<uint32_t> NetworkUtils::ipv4_to_uint32(const std::string& ip_str) 
     // HINT - Bit Shifting Refresher:
     // IPv4: 192.168.1.1 → 0xC0A80101 (32 bits = 4 bytes)
     // - Left shift (<<): moves bits left, fills with zeros
-    //   Example: 0x0A << 8 = 0x0A00 (moved 8 bits left)
+    //   Example: 0x0A << 8 = 0x0A0 (moved 8 bits left)
     // - OR (|): combines bits (0|0=0, 0|1=1, 1|0=1, 1|1=1)
     //   Example: 0xFF00 | 0x00AB = 0xFFAB
     // - AND (&): masks bits (0&0=0, 0&1=0, 1&0=0, 1&1=1)
