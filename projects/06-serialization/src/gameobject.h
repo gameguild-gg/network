@@ -7,7 +7,7 @@
  * with three float fields and an integer ID.
  *
  * You are free to choose your serialization strategy:
- *   - Raw bytes (memcpy float -> uint32_t -> write_bits 32)
+ *   - Raw bytes (std::bit_cast<uint32_t>(float) -> write_bits 32)
  *   - Quantized/compressed floats
  *   - Varint for the ID
  *   - Any combination
@@ -23,7 +23,7 @@
 #include "bitstream.h"
 
 #include <cstdint>
-#include <cstring>
+#include <bit>
 #include <cmath>
 
 // =========================================================================
@@ -43,29 +43,13 @@ struct GameObject {
     Position position;        ///< nested struct with floats
 };
 
-// ---------------------------------------------------------------------------
-// Helper: reinterpret a float as a uint32_t (and back) using memcpy
-// ---------------------------------------------------------------------------
-// This is the standard-compliant way to type-pun in C++.
-//
-//   float f = 3.14f;
-//   uint32_t bits;
-//   std::memcpy(&bits, &f, sizeof(float));
-//   // now `bits` holds the IEEE 754 bit pattern of f
-//
-// To convert back:
-//   std::memcpy(&f, &bits, sizeof(float));
+// Helper: reinterpret float <-> uint32_t using std::bit_cast (C++20).
+//   uint32_t bits = std::bit_cast<uint32_t>(f);
+//   float back    = std::bit_cast<float>(bits);
 
-// =========================================================================
-// serialize_position — serialize/deserialize a Position
-// =========================================================================
-//
-// Recommended approach (raw bytes):
-//   Writing: memcpy each float to uint32_t, write_bits(value, 32)
-//   Reading: read_bits(32), memcpy uint32_t back to float
-//
-// You may also quantize if you want (extra credit), but then use
-// an epsilon comparison in tests instead of exact equality.
+// serialize_position: write/read each float as 32 raw bits via bit_cast.
+//   Write: stream.write_bits(std::bit_cast<uint32_t>(pos.x), 32)
+//   Read:  pos.x = std::bit_cast<float>(stream.read_bits(32))
 //
 // TODO: Implement this function template.
 //

@@ -92,8 +92,12 @@ bool serialize_chat(Stream& stream, ChatMessage& msg) {
 //
 // Format:
 //   buffer[0]   = uint8_t(type)
-//   buffer[1-2] = payload_len in big-endian (use boost::endian::native_to_big)
+//   buffer[1-2] = payload_len in big-endian (high byte first, then low byte)
 //   buffer[3..] = payload bytes
+//
+// Hint: write big-endian manually:
+//   buffer.push_back(static_cast<uint8_t>((len16 >> 8) & 0xFF));  // high
+//   buffer.push_back(static_cast<uint8_t>(len16 & 0xFF));          // low
 //
 // TODO: Implement this function.
 //

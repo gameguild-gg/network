@@ -61,7 +61,7 @@ TEST_SUITE("BitWriter") {
         // Combined: 001_11_101 = 0x3D (reading right-to-left in bits)
         w.flush();
         CHECK(w.size() == 1);
-        CHECK(w.data()[0] == 0x6D);
+        CHECK(w.data()[0] == 0x3D);
         // Let's verify: 5=101 in bits 0-2, 3=11 in bits 3-4, 1=001 in bits 5-7
         // Byte: bit7..bit0 = 0 0 1 1 1 1 0 1 = 0b00111101 wait...
         // Actually: bits are packed LSB first:

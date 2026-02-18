@@ -41,7 +41,7 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <cstring>
+#include <bit>
 
 // =========================================================================
 // Wire types from the protobuf specification
@@ -94,10 +94,7 @@ inline void parse_tag(uint32_t tag, uint32_t& field_number, WireType& wire_type)
 //   1. Encode Position into a temporary buffer first (so you know its byte length).
 //   2. Write the outer message: field 1 (id) + field 2 (LEN with position bytes).
 //
-// Hint for encoding a float as I32:
-//   uint32_t fbits;
-//   std::memcpy(&fbits, &obj.position.x, sizeof(float));
-//   // write fbits as 4 little-endian bytes
+// Hint for I32 fields: use std::bit_cast<uint32_t>(float_val) instead of memcpy.
 //
 // Returns: total bytes written to buffer.
 //

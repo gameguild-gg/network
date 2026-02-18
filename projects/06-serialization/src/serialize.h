@@ -90,12 +90,12 @@ bool serialize_string(Stream& stream, std::string& str) {
 //   player.x = stream.read_bits(bits_required(0u, 1023u))   // reading
 //
 // Field order (MUST match for read/write):
-//   1. x       — bits_required(0, 1023)
-//   2. y       — bits_required(0, 1023)
-//   3. z       — bits_required(0, 1023)
-//   4. health  — bits_required(0, 100)
-//   5. heading — bits_required(0, 359)
-//   6. team    — bits_required(0, 3)
+//   1. x       — bits_required(0u, 1023u)
+//   2. y       — bits_required(0u, 1023u)
+//   3. z       — bits_required(0u, 1023u)
+//   4. health  — bits_required(0u, 100u)
+//   5. heading — bits_required(0u, 359u)
+//   6. team    — bits_required(0u, 3u)
 //   7. alive   — 1 bit (write_bool / read_bool)
 //   8. name    — serialize_string (auto byte-aligns)
 //

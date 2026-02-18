@@ -65,10 +65,15 @@ size_t encode_varint(std::unsigned_integral auto value, uint8_t* buffer) {
 // Reverse of encode_varint. Read bytes while MSB is set, accumulating
 // 7 bits at a time into out_value.
 //
+// Hint: decltype(ref_param) includes &, so use:
+//   using T = std::remove_reference_t<decltype(out_value)>;
+// before casting with static_cast<T>(...).
+//
 // Returns: number of bytes consumed.
 //
 // TODO: Implement this function.
 size_t decode_varint(const uint8_t* buffer, std::unsigned_integral auto& out_value) {
+    using T = std::remove_reference_t<decltype(out_value)>;
     // YOUR CODE HERE
     return 0; // placeholder
 }
@@ -78,6 +83,10 @@ size_t decode_varint(const uint8_t* buffer, std::unsigned_integral auto& out_val
 // ---------------------------------------------------------------------------
 // Formula (32-bit): (n << 1) ^ (n >> 31)
 //   -1 -> 1, 1 -> 2, -2 -> 3, 2 -> 4, ...
+//
+// Generic shift:  constexpr auto shift = sizeof(decltype(value)) * 8 - 1;
+// Return type:    -> std::make_unsigned_t<decltype(value)>
+// Cast result:    static_cast<std::make_unsigned_t<decltype(value)>>(...)
 //
 // The right shift MUST be arithmetic (sign-extending). Using int32_t ensures this
 // on all major compilers.
@@ -94,6 +103,8 @@ auto zigzag_encode(std::signed_integral auto value) -> std::make_unsigned_t<decl
 // Formula (32-bit): (value >> 1) ^ -(value & 1)
 //   1 -> -1, 2 -> 1, 3 -> -2, 4 -> 2, ...
 //
+// Return type: -> std::make_signed_t<decltype(value)>
+//
 // TODO: Implement this function.
 auto zigzag_decode(std::unsigned_integral auto value) -> std::make_signed_t<decltype(value)> {
     // YOUR CODE HERE
@@ -102,6 +113,8 @@ auto zigzag_decode(std::unsigned_integral auto value) -> std::make_signed_t<decl
 
 // ---------------------------------------------------------------------------
 // Convenience: encode/decode signed varint (ZigZag + varint combined)
+// Hint: chain traits for ref params:
+//   using U = std::make_unsigned_t<std::remove_reference_t<decltype(out_value)>>;
 // ---------------------------------------------------------------------------
 
 // TODO: Implement using zigzag_encode + encode_varint
@@ -112,7 +125,11 @@ size_t encode_signed_varint(std::signed_integral auto value, uint8_t* buffer) {
 
 // TODO: Implement using decode_varint + zigzag_decode
 size_t decode_signed_varint(const uint8_t* buffer, std::signed_integral auto& out_value) {
+    using U = std::make_unsigned_t<std::remove_reference_t<decltype(out_value)>>;
+    U temp = 0;
+
     // YOUR CODE HERE
+
     return 0; // placeholder
 }
 
