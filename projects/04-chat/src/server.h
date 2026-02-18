@@ -136,6 +136,13 @@ public:
     }
 
     /**
+     * Destructor closes the acceptor and all client sockets, and join all handler threads.
+     */
+    ~TcpChatServer() {
+        // Code here
+    }
+
+    /**
      * Start accepting client connections
      * Call this before running the io_context
      */
