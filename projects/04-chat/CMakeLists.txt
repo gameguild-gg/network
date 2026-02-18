@@ -25,3 +25,22 @@ endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     target_compile_options(04-chat-client PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+# Tests executable with doctest
+add_executable(04-chat-tests tests/tests.cpp)
+target_compile_features(04-chat-tests PRIVATE cxx_std_23)
+target_link_libraries(04-chat-tests PRIVATE Boost::asio doctest::doctest)
+if(WIN32)
+    target_link_libraries(04-chat-tests PRIVATE ws2_32)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    target_compile_options(04-chat-tests PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+# Register with CTest
+include(CTest)
+add_test(NAME 04-chat-tests
+    COMMAND 04-chat-tests
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
