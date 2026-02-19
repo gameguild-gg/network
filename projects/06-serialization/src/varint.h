@@ -51,19 +51,60 @@ constexpr int bits_required(std::unsigned_integral auto min,
 //   Byte 0: 0b10101100 (low 7 bits = 0101100, MSB=1 means "more")
 //   Byte 1: 0b00000010 (next 7 bits = 0000010, MSB=0 means "done")
 //
+// ---------------------------------------------------------------------------
+// encode_varint_core: core varint encoding logic (single implementation)
+// ---------------------------------------------------------------------------
+// Each byte uses 7 data bits + 1 continuation bit (MSB).
+// If MSB is set, more bytes follow. If MSB is clear, this is the last byte.
+//
+// Takes a callable `write_byte` that writes a single uint8_t to any destination
+// (buffer, stream, etc.). This avoids duplicating the encoding loop.
+//
+// WriteByteFn signature: void write_byte(uint8_t b)
+//
+// Example: value = 300 (0b100101100)
+//   Byte 0: 0b10101100 (low 7 bits = 0101100, MSB=1 means "more")
+//   Byte 1: 0b00000010 (next 7 bits = 0000010, MSB=0 means "done")
+//
 // Returns: number of bytes written.
 //
 // TODO: Implement this function.
-size_t encode_varint(std::unsigned_integral auto value, uint8_t* buffer) {
-    // YOUR CODE HERE
-    return 0; // placeholder
+template <typename WriteByteFn>
+size_t encode_varint_core(std::unsigned_integral auto value, WriteByteFn write_byte) {
+    size_t i = 0;
+    // your code goes here
+    return i;
 }
 
 // ---------------------------------------------------------------------------
-// decode_varint: decode a varint from buffer into out_value
+// encode_varint (buffer overload): encode to a uint8_t* buffer
+// ---------------------------------------------------------------------------
+// Wraps encode_varint_core with a lambda that writes to buffer[i++].
+size_t encode_varint(std::unsigned_integral auto value, uint8_t* buffer) {
+    size_t i = 0;
+    return encode_varint_core(value, [&](uint8_t b) { buffer[i++] = b; });
+}
+
+// ---------------------------------------------------------------------------
+// encode_varint (stream overload): encode to any stream with write_bytes()
+// ---------------------------------------------------------------------------
+// Wraps encode_varint_core with a lambda that writes one byte via stream.
+template <typename Stream>
+    requires requires(Stream& s) { s.write_bytes(static_cast<const uint8_t*>(nullptr), size_t(0)); }
+size_t encode_varint(std::unsigned_integral auto value, Stream& stream) {
+    return encode_varint_core(value, [&](uint8_t b) { stream.write_bytes(&b, 1); });
+}
+
+// ---------------------------------------------------------------------------
+// decode_varint_core: core varint decoding logic (single implementation)
 // ---------------------------------------------------------------------------
 // Reverse of encode_varint. Read bytes while MSB is set, accumulating
 // 7 bits at a time into out_value.
+//
+// Takes a callable `read_byte` that returns the next uint8_t from any source
+// (buffer, stream, etc.). This avoids duplicating the decoding loop.
+//
+// ReadByteFn signature: uint8_t read_byte()  — returns the next byte
 //
 // Hint: decltype(ref_param) includes &, so use:
 //   using T = std::remove_reference_t<decltype(out_value)>;
@@ -72,10 +113,38 @@ size_t encode_varint(std::unsigned_integral auto value, uint8_t* buffer) {
 // Returns: number of bytes consumed.
 //
 // TODO: Implement this function.
-size_t decode_varint(const uint8_t* buffer, std::unsigned_integral auto& out_value) {
+template <typename ReadByteFn>
+size_t decode_varint_core(ReadByteFn read_byte, std::unsigned_integral auto& out_value) {
     using T = std::remove_reference_t<decltype(out_value)>;
-    // YOUR CODE HERE
-    return 0; // placeholder
+    T result = 0;
+    size_t i = 0;
+    int shift = 0;
+    uint8_t byte;
+    // your code goes here
+    return i;
+}
+
+// ---------------------------------------------------------------------------
+// decode_varint (buffer overload): decode from a uint8_t* buffer
+// ---------------------------------------------------------------------------
+// Wraps decode_varint_core with a lambda that reads from buffer[i++].
+size_t decode_varint(const uint8_t* buffer, std::unsigned_integral auto& out_value) {
+    size_t i = 0;
+    return decode_varint_core([&]() -> uint8_t { return buffer[i++]; }, out_value);
+}
+
+// ---------------------------------------------------------------------------
+// decode_varint (stream overload): decode from any stream with read_bytes()
+// ---------------------------------------------------------------------------
+// Wraps decode_varint_core with a lambda that reads one byte via stream.
+template <typename Stream>
+    requires requires(Stream& s) { s.read_bytes(static_cast<uint8_t*>(nullptr), size_t(0)); }
+size_t decode_varint(Stream& stream, std::unsigned_integral auto& out_value) {
+    return decode_varint_core([&]() -> uint8_t {
+        uint8_t byte;
+        stream.read_bytes(&byte, 1);
+        return byte;
+    }, out_value);
 }
 
 // ---------------------------------------------------------------------------

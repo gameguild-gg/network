@@ -50,16 +50,13 @@ struct PlayerState {
 //
 // Writing (IsWriter):
 //   1. Reject strings longer than 255 bytes (return false).
-//   2. Flush pending bits (call flush() to byte-align).
-//   3. Encode the string length as a varint and append to the buffer.
-//      Hint: you'll need to write the varint bytes to a temp buffer first,
-//      then use write_bytes() to append them to the stream.
-//   4. Write the raw string bytes using write_bytes().
+//   2. Encode the string length as a varint directly to the stream
+//      using encode_varint(value, stream).
+//   3. Write the raw string bytes using write_bytes().
 //
 // Reading (IsReader):
-//   1. Read the varint length from the current position.
-//      Hint: you need the raw byte pointer — use stream internals or
-//      read bytes into a temp buffer first.
+//   1. Decode the varint length directly from the stream using
+//      decode_varint(stream, len).
 //   2. Read that many raw bytes for the string content.
 //
 // TODO: Implement this function template.
