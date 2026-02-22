@@ -128,14 +128,76 @@ inline size_t read_packet_header(const uint8_t* buffer, PacketHeader& header) {
 // dispatch_packet — read header, then deserialize the appropriate message
 // =========================================================================
 //
-// Steps:
-//   1. Read the header with read_packet_header.
-//   2. Based on header.type, deserialize the payload:
-//      - PLAYER_UPDATE: create BitReader over payload, call serialize_player
-//      - CHAT_MESSAGE:  create BitReader over payload, call serialize_chat
-//      - OBJECT_UPDATE: call decode_proto_game_object on payload
-//      - PING:          no payload to read
-//   3. Print what was received (see examples in README).
+// This function is the "receiver" side of the RPC system.
+// It reads the 3-byte header, figures out which message type arrived,
+// then deserializes the payload and prints the result.
+//
+// Step 1 — Parse the header (3 bytes):
+//
+//   PacketHeader header;
+//   size_t header_size = read_packet_header(buffer, header);
+//
+//   After this, header.type tells you which message arrived and
+//   header.payload_len is the number of payload bytes that follow.
+//
+// Step 2 — Point to the payload (everything after the header):
+//
+//   const uint8_t* payload     = buffer + header_size;
+//   size_t         payload_len = header.payload_len;
+//
+// Step 3 — Switch on header.type and deserialize accordingly:
+//
+//   switch (header.type) {
+//
+//   ---- PLAYER_UPDATE ----
+//   Payload was written with a BitWriter/serialize_player.
+//   Deserialize by constructing a BitReader over the payload, then calling
+//   serialize_player with an empty PlayerState:
+//
+//     case MessageType::PLAYER_UPDATE: {
+//         BitReader reader(payload, payload_len);
+//         PlayerState player;
+//         serialize_player(reader, player);
+//         std::cout << "PLAYER_UPDATE: name=" << player.name
+//                   << " x=" << player.x << " y=" << player.y
+//                   << " z=" << player.z << " hp=" << (int)player.health << "\n";
+//         break;
+//     }
+//
+//   ---- CHAT_MESSAGE ----
+//   Same approach — BitReader over payload, then serialize_chat:
+//
+//     case MessageType::CHAT_MESSAGE: {
+//         BitReader reader(payload, payload_len);
+//         ChatMessage msg;
+//         serialize_chat(reader, msg);
+//         std::cout << "CHAT_MESSAGE: [" << msg.sender << "] " << msg.text << "\n";
+//         break;
+//     }
+//
+//   ---- OBJECT_UPDATE ----
+//   The payload is raw protobuf wire format — no BitReader needed.
+//   Pass the payload pointer directly to decode_proto_game_object:
+//
+//     case MessageType::OBJECT_UPDATE: {
+//         GameObject obj;
+//         decode_proto_game_object(payload, obj);
+//         std::cout << "OBJECT_UPDATE: id=" << obj.id
+//                   << " pos=(" << obj.position.x << ","
+//                   << obj.position.y << "," << obj.position.z << ")\n";
+//         break;
+//     }
+//
+//   ---- PING ----
+//   No payload; just acknowledge receipt:
+//
+//     case MessageType::PING:
+//         std::cout << "PING received\n";
+//         break;
+//   }
+//
+// NOTE: buffer_len is provided for bounds-checking but is not strictly
+// required if you trust write_packet to produce well-formed packets.
 //
 // TODO: Implement this function.
 //

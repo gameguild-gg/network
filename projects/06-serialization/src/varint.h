@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <cmath>
 #include <concepts>
 #include <bit>
 #include <type_traits>
